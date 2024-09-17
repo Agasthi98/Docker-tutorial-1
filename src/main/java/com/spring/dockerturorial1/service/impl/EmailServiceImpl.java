@@ -10,8 +10,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -20,9 +24,11 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
     @Value("${spring.mail.username}")
     private String sender;
+    private final SpringTemplateEngine templateEngine;
 
-    public EmailServiceImpl(JavaMailSender javaMailSender) {
+    public EmailServiceImpl(JavaMailSender javaMailSender, SpringTemplateEngine templateEngine) {
         this.javaMailSender = javaMailSender;
+        this.templateEngine = templateEngine;
     }
 
 
@@ -93,4 +99,41 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    public String sendEmailWithThymeleafTemplate(EmailDetailsRequest details) {
+        try {
+
+            Map<String,Object> templateModel = createTransferEmail();
+            // Create a MimeMessage
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(details.getRecipient());
+            helper.setSubject(details.getSubject());
+
+            // Create context for Thymeleaf
+            Context context = new Context();
+            context.setVariables(templateModel);
+
+            // Process Thymeleaf template to generate the HTML
+            String htmlContent = templateEngine.process("email-template.html", context);
+            helper.setText(htmlContent, true);
+
+            // Send the email
+            javaMailSender.send(message);
+            return "Sent successfully!";
+        } catch (Exception e) {
+            return "Error while sending mail!!!";
+        }
+    }
+
+    public Map<String,Object> createTransferEmail()  {
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("amount", "10,000.00");
+        templateModel.put("toBank", "Aga com bank");
+        templateModel.put("accountNumber", "11111");
+        templateModel.put("receiverReference", "hBSHJabs");
+        templateModel.put("transactionReference", "6231dh");
+        templateModel.put("dateTime", "11/09/2024 - 07:43 PM");
+        return templateModel;
+    }
 }

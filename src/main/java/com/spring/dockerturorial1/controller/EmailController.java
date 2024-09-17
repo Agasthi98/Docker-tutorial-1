@@ -28,4 +28,11 @@ public class EmailController {
     {
         return emailService.sendMailWithAttachment(details);
     }
+
+    @PostMapping("/sendMailWithThymeleafTemplate")
+    public String sendMailWithThymeleafTemplate(
+            @RequestBody EmailDetailsRequest details)
+    {
+        return emailService.sendEmailWithThymeleafTemplate(details);
+    }
 }

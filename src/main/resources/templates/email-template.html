@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .success-icon {
+            font-size: 50px;
+            color: #4caf50;
+        }
+        .amount {
+            font-size: 28px;
+            color: #000;
+            margin: 20px 0;
+        }
+        .info {
+            margin: 20px 0;
+        }
+        .info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .footer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="success-icon">
+        ✅
+    </div>
+    <h2>Transfer Successful!</h2>
+    <div class="amount">
+        LKR <span th:text="${amount}"></span>
+    </div>
+    <div class="info">
+        <p><strong>To:</strong> <span th:text="${toBank}"></span></p>
+        <p><strong>Account Number:</strong> <span th:text="${accountNumber}"></span></p>
+    </div>
+    <div class="footer">
+        <p>Receiver Reference: <span th:text="${receiverReference}"></span></p>
+        <p>Transaction Reference: <span th:text="${transactionReference}"></span></p>
+        <p>Date/Time: <span th:text="${dateTime}"></span></p>
+    </div>
+</div>
+
+</body>
+</html>
